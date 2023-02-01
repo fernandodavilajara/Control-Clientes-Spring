@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{plantilla.titulo}"></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <header th:fragment="header" >
+            <h1 th:text="#{plantilla.titulo}"></h1>
+        </header>
+        
+        <footer th:fragment="footer">
+            
+            <div>
+                <br>
+                <a th:href="@{/?lang=en}">EN</a> |
+                <a th:href="@{/?lang=es}">ES</a>
+                <span>
+                    <!--Este formato respeta el enlace-->
+                    [[#{plantilla.pie-pagina}]]
+                    <a href="#">lorem ipsum</a>
+                </span>
+            </div>
+            
+            <p>
+               
+            </p>
+        </footer>
+        
+    </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>[[#{modificar.titulo}]]</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+         <header th:replace="~{layout/plantilla :: header}"></header>
+        <h2>[[#{modificar.titulo}]]</h2>
+        <a th:href="@{/}">[[#{accion.regresar}]]</a>
+        
+        <!--FORMULARIO  -->
+        <form th:action="@{/guardar}" method="post" th:object="${persona}">
+            
+            <input type="hidden" name="idClientes" th:field="*{idClientes}">
+            
+            <label for="nombre">[[#{persona.nombre}]]</label>
+            <input type="text" name="nombre" th:field="*{nombre}" >
+            <!-- VALIDACION DE CAMPOS, DOCUMENTACION EN THYMELEAF-->
+            <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">[[#{NotEmpty.persona.nombre}]]</span>
+            <br>
+            
+            
+            <label for="apellido">[[#{persona.apellido}]]</label>
+            <input type="text" name="apellido" th:field="*{apellido}" >
+            <span th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"> [[#{NotEmpty.persona.apellido}]]</span>
+            <br>
+
+            <label for="email">[[#{persona.email}]]</label>
+            <input type="text" name="email" th:field="*{email}" >
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> [[#{NotEmpty.persona.email}]]</span>
+            <br>
+
+            <label for="telefono">[[#{persona.telefono}]]</label>
+            <input type="text" name="telefono" th:field="*{telefono}" ><br>
+            <span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"> [[#{NotEmpty.persona.telefono}]] </span>
+            <br>
+
+            <input type="submit" name="guardar" value="guardar" th:value="#{accion.guardar}">
+        </form>
+        
+        
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        
+    </body>
+</html>
