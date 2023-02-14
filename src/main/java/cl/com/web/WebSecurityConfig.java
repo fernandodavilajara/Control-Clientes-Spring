@@ -32,14 +32,13 @@ public class WebSecurityConfig {
         
         /***
          * Cadena de metodos que permite administrar politicas de acceso por 
-         * niveles.Los administradores pueden acceder a las paginas /editar
- /agregar y /eliminar.
+         * niveles.Los administradores pueden acceder a las paginas /editar,  /agregar y /eliminar.
          * 
          * usuarios basicos solo pueden acceder a la lista,
- que esta en la raiz "/" 
- 
- tambien permite el manejo de la pagina de login y errores (en este caso
- el error 403)
+        *que esta en la raiz "/" 
+        * 
+         tambien permite el manejo de la pagina de login y errores (en este caso
+         el error 403)
          * 
          * @param http
          * @param authenticationManager
@@ -56,9 +55,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                         )
-                        .formLogin(withDefaults());
-//                        
-//                        .exceptionHandling().accessDeniedPage("/errores/403");
+                        .formLogin(withDefaults())
+                        .exceptionHandling().accessDeniedPage("/errores/403");
                 
                 return http.build();
 
