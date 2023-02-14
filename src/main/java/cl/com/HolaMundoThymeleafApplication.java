@@ -8,6 +8,10 @@ public class HolaMundoThymeleafApplication {
 
 	public static void main(String[] args) {
                 SpringApplication.run(HolaMundoThymeleafApplication.class, args);
+                
+                
+        
+                
 	}
 
 }

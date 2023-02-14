@@ -10,6 +10,8 @@ import cl.com.servicio.PersonaServiceImpl;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -30,8 +32,9 @@ public class ControladorInicio {
         
         //El objeto model permite gestionar atributos
         @GetMapping("/")
-        public String inicio(Model  model){                                               
+        public String inicio(Model  model, @AuthenticationPrincipal User user){
                 var personas = personaService.listarPersona();
+                log.info("Usuario logeado: " + user);
                 model.addAttribute("personas", personas);
                 return "index";
         }
