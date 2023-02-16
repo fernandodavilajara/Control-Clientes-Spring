@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <title th:text="#{plantilla.titulo}"></title>
         <meta charset="UTF-8">
@@ -22,7 +23,10 @@
                     [[#{plantilla.pie-pagina}]]
                     <a href="#">lorem ipsum</a>
                 </span>
+                
                 <form method="post" th:action="@{/logout}">
+                    <b>User: </b> <span sec:authentication="name">Usuario que hizo login</span>
+                    <b>Roles: </b> <span sec:authentication="principal.authorities">Roles</span>
                     <a href="#" onclick="this.parentNode.submit();">Logout</a>
                 </form>
             </div>
