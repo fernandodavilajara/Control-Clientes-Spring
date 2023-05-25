@@ -2,17 +2,17 @@
 package cl.com.web;
 
 
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -23,16 +23,20 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfig {
         
+        @Autowired
+        private UserDetailsService userDetailsService;
         
+
         /***
          * Cadena de metodos que permite administrar politicas de acceso por 
          * niveles.Los administradores pueden acceder a las paginas /editar,  /agregar y /eliminar.
          * 
          * usuarios basicos solo pueden acceder a la lista,
-        *que esta en la raiz "/" 
-        * 
+         *que esta en la raiz "/" 
+         * 
          tambien permite el manejo de la pagina de login y errores (en este caso
          el error 403)
          * 
@@ -48,10 +52,18 @@ public class WebSecurityConfig {
                         .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/editar/**", "/agregar/**", "/eliminar")
                                 .hasRole("ADMIN")
-                        .requestMatchers("/").hasAnyRole("ADMIN", "USER")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/").hasAnyRole("ADMIN", "USER")
+                                .anyRequest().authenticated()
                         )
-                        .formLogin(withDefaults())
+                        .formLogin(form -> form.loginPage("/login")
+                                .defaultSuccessUrl("/", true)
+                                .permitAll()
+                        )
+                        .logout(logout -> logout                                                
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login")
+                                .invalidateHttpSession(true)
+                        )
                         .exceptionHandling().accessDeniedPage("/errores/403");
                 
                 return http.build();
@@ -63,7 +75,7 @@ public class WebSecurityConfig {
         
         /***
         * La lógica detrás de este Bean es configurar un objeto AuthenticationManager 
-        * que se alimenta de un servicio de detalles de usuario, el cual es especificado
+        * que se alimenta de un servicio de detal les de usuario, el cual es especificado
         * por el método userDetailsService(). La autenticación es gestionada por
         * el objeto AuthenticationManager y se construye mediante el método build().
         * 
@@ -79,7 +91,7 @@ public class WebSecurityConfig {
         @Bean
         protected AuthenticationManager authManager(HttpSecurity http) throws Exception{
                 return http.getSharedObject(AuthenticationManagerBuilder.class)
-                        .userDetailsService(userDetailsService())
+                        .userDetailsService(userDetailsService)
                         .passwordEncoder(passwordEncoder())
                         .and()
                         .build();
@@ -91,26 +103,26 @@ public class WebSecurityConfig {
          * Crea usuarios y roles con contraseñas encriptadas
         * @return 
          */
-        @Bean
-        protected InMemoryUserDetailsManager userDetailsService() {
-                
-                InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-                
-                manager.createUser(User.withUsername("admin")
-                        .password(passwordEncoder().encode("123")) //hace referencia a metodo passwordEncoder mas abajo 
-                        .roles("ADMIN", "USER")
-                        .build());
-                
-                manager.createUser(User.withUsername("user")
-                        .password(passwordEncoder().encode("123"))
-                        .roles("USER")
-                        .build());
-                
-                return manager;
-
-        }
-        
-        
+//        @Bean
+//        protected InMemoryUserDetailsManager userDetailsService() {
+//                
+//                InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//                
+//                manager.createUser(User.withUsername("admin")
+//                        .password(passwordEncoder().encode("123")) 
+//                        .roles("ADMIN", "USER")
+//                        .build());
+//                
+//                manager.createUser(User.withUsername("user")
+//                        .password(passwordEncoder().encode("123"))
+//                        .roles("USER")
+//                        .build());
+//                
+//                return manager;
+//
+//        }
+               
+  
         @Bean
         protected PasswordEncoder passwordEncoder(){
                 return new BCryptPasswordEncoder();

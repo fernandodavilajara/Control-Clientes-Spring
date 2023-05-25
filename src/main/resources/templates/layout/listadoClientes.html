@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:inline="text">
+    <head>
+        <title>Listado Clientes</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <section th:fragment="listadoClientes" id="clientes">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{persona.titulo-lista}]]</h4>
+                            </div>
+                            <!--La lista de personas llamada en la siguiente linea viene desde cl.com.web.ControladorInicio.java -->
+                            <div th:if="${personas != null and !personas.empty}">
+                                <table class="table table-stryped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th th:text="#{persona.nombre}">Nombre</th>
+                                            <th th:text="#{persona.saldo}">Saldo</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="persona, contador : ${personas}">
+                                            <td>[[${contador.count}]]</td>
+                                            <td>[[${persona.nombre} + ' ' + ${persona.apellido}]]</td>
+
+                                            <td th:text="${#numbers.formatDecimal(persona.saldo, 3, 'POINT', 2, 'COMMA')}"></td>
+                                            <td>
+                                                <!-- ERROR ACA -->
+                                                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/editar/} + ${persona.idClientes}" class="btn btn-secondary">
+                                                    <i class="fas fa-angle-double-right"></i>
+                                                    [[#{accion.editar}]]
+                                                </a>
+                                            </td>
+                                            <td>
+
+                                                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/eliminar/} + ${persona.idClientes}" class="btn btn-dark">
+                                                    <i class="fas fa-angle-double-right"></i>
+                                                    [[#{accion.eliminar}]]
+                                                </a>
+                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${personas == null or personas.empty}">
+                                <span th:text="#{persona.lista-vacia}">Lista vacía</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-center bg-danger text-white mb-3">
+                            <div class="card-body">
+                                <h3 th:text="#{persona.saldo-total}">Saldo total</h3>
+                                <h4 class="display-4" th:text="${#numbers.formatDecimal(saldoTotal, 3, 'POINT', 2, 'COMMA')}"></h4>
+                            </div>
+                        </div>
+
+                        <div class="card text-center bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h3 th:text="#{persona.total-clientes}">Total Clientes</h3>
+                                <h4 class="display-4">
+                                    <i class="fas fa-users">
+                                        [[${totalClientes}]]
+                                    </i>
+                                </h4>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </section>
+
+    </body>
+</html>

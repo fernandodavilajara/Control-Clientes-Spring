@@ -2,38 +2,70 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
+    <head th:fragment="head">
         <title th:text="#{plantilla.titulo}"></title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport"  content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        
     </head>
     <body>
-        <header th:fragment="header" >
-            <h1 th:text="#{plantilla.titulo}"></h1>
+     
+         <header th:fragment="header">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+                <div class="container">
+                    <a th:href="@{/}" class="navbar-brand" th:text="#{plantilla.titulo}">Control Clientes</a>
+                    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav">
+                            <li class="nav-item px-2">
+                                <a th:href="@{/}" class="nav-link active" th:text="#{barra.titulo}">Inicio</a>
+                            </li>
+                        </ul>
+                        <ul sec:authorize="isAuthenticated()" class="navbar-nav ml-auto">
+                            <li class="nav-item mr-3">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-user"></i>
+                                    <span th:text="#{barra.bienvenido}">Bievenido:</span>
+                                    <span sec:authentication="name">Usuario</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="POST" th:action="@{/logout}">
+                                    <a href="#" onclick="this.parentNode.submit();" class="nav-link">
+                                        <i class="fas fa-user-times"></i> [[#{barra.salir}]]
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </header>
         
-        <footer th:fragment="footer">
+        <footer th:fragment="footer" class="bg-dark text-white mt-5 p-5">
             
-            <div>
-                <br>
-                <a th:href="@{/?lang=en}">EN</a> |
-                <a th:href="@{/?lang=es}">ES</a>
-                <span>
-                    <!--Este formato respeta el enlace-->
-                    [[#{plantilla.pie-pagina}]]
-                    <a href="#">lorem ipsum</a>
-                </span>
+            <div class="container">
                 
-                <form method="post" th:action="@{/logout}">
-                    <b>User: </b> <span sec:authentication="name">Usuario que hizo login</span>
-                    <b>Roles: </b> <span sec:authentication="principal.authorities">Roles</span>
-                    <a href="#" onclick="this.parentNode.submit();">Logout</a>
-                </form>
-            </div>
-            
-            <p>
-               
-            </p>
+                <div class="col">
+                    <p class="lead text-center">
+                        <a th:href="@{/?lang=en}">EN</a> |
+                        <a th:href="@{/?lang=es}">ES</a>
+                        
+                        <span>
+                            <!--Este formato respeta el enlace-->
+                            [[#{plantilla.pie-pagina}]]
+                            <a href="http://github.com/fernandodavilajara">GitHub: Fernando Davila</a>
+                        </span>
+                    </p>
+                </div>
+                
         </footer>
         
     </body>

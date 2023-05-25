@@ -36,6 +36,12 @@ public class ControladorInicio {
                 var personas = personaService.listarPersona();
                 log.info("Usuario logeado: " + user);
                 model.addAttribute("personas", personas);
+                var saldoTotal = 0D;
+                for(var p: personas){
+                        saldoTotal += p.getSaldo();
+                }
+                model.addAttribute("saldoTotal", saldoTotal);
+                model.addAttribute("totalClientes", personas.size()); //total objetos personas dentro del listado
                 return "index";
         }
         

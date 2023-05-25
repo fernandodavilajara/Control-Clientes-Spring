@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:inline="text">
+     <head th:replace="~{layout/plantilla :: head}">
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <section th:fragment="editarCliente">
+            <form th:action="@{/guardar}" th:object="${persona}" method="post" class="was-validated">
+                <input type="hidden" name="idPersona" th:field="*{idClientes}"></input>
+                
+                <section th:replace="~{layout/botonesEditar :: botonesEditar}"></section>
+                
+                <div id="details">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 th:text="Editar"></h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="nombre" th:text="#{persona.nombre}"></label>
+                                        <input type="text" name="nombre" class="form-control" required="true" th:field="*{nombre}">
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="apellido" th:text="#{persona.apellido}"></label>
+                                        <input type="text" name="apellido" class="form-control" required="true" th:field="*{apellido}">
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="email" th:text="#{persona.email}"></label>
+                                        <input type="email" name="email" class="form-control" required="true" th:field="*{email}">
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="telefono" th:text="#{persona.telefono}"></label>
+                                        <input type="tel" name="telefono" class="form-control" th:field="*{telefono}">
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="saldo" th:text="#{persona.saldo}"></label>
+                                        <input type="number" step="any" name="saldo" class="form-control" required="true" th:field="*{saldo}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </body>
+</html>
